@@ -14,4 +14,8 @@ class Invoice {
     private var amount: Double = 0.0
     private lateinit var createdAt: Date
     private lateinit var updatedAt: Date
+
+    fun addTax(product: Product, tax: Tax){
+
+    }
 }

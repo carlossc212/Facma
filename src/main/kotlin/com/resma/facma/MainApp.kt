@@ -1,5 +1,6 @@
 package com.resma.facma
 
+import com.resma.facma.entity.Product
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
