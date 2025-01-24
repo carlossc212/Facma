@@ -1,0 +1,33 @@
+/* Cambiar el color de fondo del TabPane */
+.tab-pane {
+    -fx-background-color: #f0f0f0; /* Fondo del área de contenido */
+}
+
+/* Estilo para las pestañas */
+.tab {
+    -fx-background-color: #e0e0e0; /* Fondo de las pestañas */
+    -fx-text-base-color: #333;     /* Color del texto */
+    -fx-padding: 10;              /* Espaciado interno */
+    -fx-focus-color: transparent; /* Eliminar el anillo de enfoque */
+    -fx-faint-focus-color: transparent; /* Eliminar el color tenue del enfoque */
+}
+
+/* Cambiar el estilo cuando una pestaña está seleccionada */
+.tab:selected {
+    -fx-background-color: #0078d7; /* Fondo de la pestaña seleccionada */
+    -fx-text-base-color: #fff;     /* Texto blanco en la pestaña seleccionada */
+    -fx-focus-color: transparent; /* Eliminar el anillo de enfoque */
+    -fx-faint-focus-color: transparent; /* Eliminar el color tenue del enfoque */
+}
+
+/* Estilo del borde al pasar el mouse sobre las pestañas */
+.tab:hover {
+    -fx-background-color: #c0c0c0; /* Fondo cuando el mouse está encima */
+}
+
+/* Personalizar los bordes del área del contenido */
+.tab-content-area {
+    -fx-border-color: #d0d0d0; /* Color del borde */
+    -fx-border-width: 2px;     /* Ancho del borde */
+    -fx-border-radius: 5px;    /* Bordes redondeados */
+}

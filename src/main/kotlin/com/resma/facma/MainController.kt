@@ -1,14 +1,62 @@
 package com.resma.facma
 
 import javafx.fxml.FXML
-import javafx.scene.control.Label
+import javafx.fxml.FXMLLoader
+import javafx.scene.control.Tab
+import javafx.scene.control.TabPane
+import javafx.scene.layout.Pane
+import javafx.stage.Stage
 
 class MainController {
     @FXML
-    private lateinit var welcomeText: Label
+    private lateinit var tabPane: TabPane
 
     @FXML
-    private fun onHelloButtonClick() {
-        welcomeText.text = "Welcome to JavaFX Application!"
+    private lateinit var tabFacturas: Tab
+    @FXML
+    private lateinit var tabEmisor: Tab
+    @FXML
+    private lateinit var tabReceptor: Tab
+    @FXML
+    private lateinit var tabProductos: Tab
+
+    @FXML
+    fun initialize() {
+        // Cargar la vista de Facturas al inicio
+        loadView(tabFacturas, "facturas.fxml")
+        loadView(tabEmisor, "emisor.fxml")
+        loadView(tabReceptor, "receptor.fxml")
+        loadView(tabProductos, "productos.fxml")
+
+        // Configurar el cambio dinámico de vistas en las pestañas
+        tabFacturas.setOnSelectionChanged { if (tabFacturas.isSelected) loadView(tabFacturas, "facturas.fxml") }
+        tabEmisor.setOnSelectionChanged { if (tabEmisor.isSelected) loadView(tabEmisor, "emisor.fxml") }
+        tabReceptor.setOnSelectionChanged { if (tabReceptor.isSelected) loadView(tabReceptor, "receptor.fxml") }
+        tabProductos.setOnSelectionChanged { if (tabProductos.isSelected) loadView(tabProductos, "productos.fxml") }
+
+        // Ajustar el tamaño del Stage cuando cambie la pestaña seleccionada
+        tabPane.selectionModel.selectedItemProperty().addListener { _, _, _ -> adjustStageSize() }
+    }
+
+    private fun loadView(tab: Tab, fxmlFile: String) {
+        try {
+            val content: Pane = FXMLLoader(javaClass.getResource(fxmlFile)).load()
+            tab.content = content
+        } catch (_: Exception) { }
+    }
+    private fun adjustStageSize() {
+        val stage = tabPane.scene?.window as? Stage ?: return
+        val selectedTab = tabPane.selectionModel.selectedItem ?: return
+        val content = selectedTab.content
+
+        if (content != null) {
+            // Calcular el tamaño preferido del contenido
+            val prefWidth = content.prefWidth(-1.0)
+            val prefHeight = content.prefHeight(-1.0)
+
+            // Ajustar el tamaño del Stage sumando los bordes
+            stage.width = prefWidth + tabPane.insets.left + tabPane.insets.right
+            stage.height = prefHeight + tabPane.insets.top + tabPane.insets.bottom + tabPane.tabMaxHeight
+        }
     }
 }
