@@ -1,33 +1,71 @@
-/* Cambiar el color de fondo del TabPane */
-.tab-pane {
+/* Estilo general del TabPane */
+.tab-blue {
     -fx-background-color: #f0f0f0; /* Fondo del área de contenido */
+    -fx-tab-min-width: 100px;      /* Ancho mínimo de las pestañas */
+    -fx-tab-max-width: 200px;      /* Ancho máximo de las pestañas */
+    -fx-tab-min-height: 30px;      /* Altura mínima de las pestañas */
 }
 
-/* Estilo para las pestañas */
-.tab {
+/* Estilo general de las pestañas */
+.tab-blue .tab {
     -fx-background-color: #e0e0e0; /* Fondo de las pestañas */
     -fx-text-base-color: #333;     /* Color del texto */
-    -fx-padding: 10;              /* Espaciado interno */
+    -fx-padding: 0;              /* Espaciado interno */
     -fx-focus-color: transparent; /* Eliminar el anillo de enfoque */
     -fx-faint-focus-color: transparent; /* Eliminar el color tenue del enfoque */
+    -fx-border-radius: 5px;       /* Bordes redondeados */
 }
 
-/* Cambiar el estilo cuando una pestaña está seleccionada */
-.tab:selected {
+/* Estilo para la pestaña seleccionada */
+.tab-blue .tab:selected {
     -fx-background-color: #0078d7; /* Fondo de la pestaña seleccionada */
     -fx-text-base-color: #fff;     /* Texto blanco en la pestaña seleccionada */
+    -fx-border-color: #005EA6;    /* Borde azul más oscuro */
+    -fx-border-radius: 5px;       /* Bordes redondeados */
     -fx-focus-color: transparent; /* Eliminar el anillo de enfoque */
     -fx-faint-focus-color: transparent; /* Eliminar el color tenue del enfoque */
 }
 
-/* Estilo del borde al pasar el mouse sobre las pestañas */
-.tab:hover {
-    -fx-background-color: #c0c0c0; /* Fondo cuando el mouse está encima */
+/* Estilo cuando el mouse está encima de una pestaña */
+.tab-blue .tab:hover {
+    -fx-background-color: #c0c0c0; /* Fondo más claro al pasar el mouse */
 }
 
-/* Personalizar los bordes del área del contenido */
-.tab-content-area {
+/* Estilo del área de contenido de las pestañas */
+.tab-blue .tab-content-area {
     -fx-border-color: #d0d0d0; /* Color del borde */
     -fx-border-width: 2px;     /* Ancho del borde */
     -fx-border-radius: 5px;    /* Bordes redondeados */
+}
+
+/* Botón verde más pequeño */
+.button-green {
+    -fx-background-color: #4CAF50; /* Color de fondo verde */
+    -fx-text-fill: white;          /* Texto blanco */
+    -fx-padding: 5 10;             /* Espaciado interno reducido */
+    -fx-font-size: 12px;           /* Tamaño de fuente reducido */
+    -fx-background-radius: 10px;   /* Bordes más redondeados */
+    -fx-border-color: transparent; /* Eliminar borde */
+    -fx-border-width: 0px;         /* Sin borde visible */
+}
+
+/* Efecto al pasar el mouse sobre el botón verde */
+.button-green:hover {
+    -fx-background-color: #45A049; /* Fondo más claro al pasar el mouse */
+}
+
+/* Botón azul más pequeño */
+.button-blue {
+    -fx-background-color: #0078D7; /* Color de fondo azul */
+    -fx-text-fill: white;          /* Texto blanco */
+    -fx-padding: 5 10;             /* Espaciado interno reducido */
+    -fx-font-size: 12px;           /* Tamaño de fuente reducido */
+    -fx-background-radius: 10px;   /* Bordes más redondeados */
+    -fx-border-color: transparent; /* Eliminar borde */
+    -fx-border-width: 0px;         /* Sin borde visible */
+}
+
+/* Efecto al pasar el mouse sobre el botón azul */
+.button-blue:hover {
+    -fx-background-color: #006BB5; /* Fondo más claro al pasar el mouse */
 }

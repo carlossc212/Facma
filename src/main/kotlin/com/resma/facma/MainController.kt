@@ -12,27 +12,27 @@ class MainController {
     private lateinit var tabPane: TabPane
 
     @FXML
-    private lateinit var tabFacturas: Tab
+    private lateinit var tabInvoice: Tab
     @FXML
-    private lateinit var tabEmisor: Tab
+    private lateinit var tabProduct: Tab
+    @FXML
+    private lateinit var tabEmitter: Tab
     @FXML
     private lateinit var tabReceptor: Tab
-    @FXML
-    private lateinit var tabProductos: Tab
 
     @FXML
     fun initialize() {
         // Cargar la vista de Facturas al inicio
-        loadView(tabFacturas, "facturas.fxml")
-        loadView(tabEmisor, "emisor.fxml")
-        loadView(tabReceptor, "receptor.fxml")
-        loadView(tabProductos, "productos.fxml")
+        loadView(tabInvoice, "invoice-view.fxml")
+        loadView(tabProduct, "product-view.fxml")
+        loadView(tabEmitter, "emitter-view.fxml")
+        loadView(tabReceptor, "receptor-view.fxml")
 
         // Configurar el cambio dinámico de vistas en las pestañas
-        tabFacturas.setOnSelectionChanged { if (tabFacturas.isSelected) loadView(tabFacturas, "facturas.fxml") }
-        tabEmisor.setOnSelectionChanged { if (tabEmisor.isSelected) loadView(tabEmisor, "emisor.fxml") }
-        tabReceptor.setOnSelectionChanged { if (tabReceptor.isSelected) loadView(tabReceptor, "receptor.fxml") }
-        tabProductos.setOnSelectionChanged { if (tabProductos.isSelected) loadView(tabProductos, "productos.fxml") }
+        tabInvoice.setOnSelectionChanged { if (tabInvoice.isSelected) loadView(tabInvoice, "invoice-view.fxml") }
+        tabProduct.setOnSelectionChanged { if (tabProduct.isSelected) loadView(tabProduct, "product-view.fxml") }
+        tabEmitter.setOnSelectionChanged { if (tabEmitter.isSelected) loadView(tabEmitter, "emitter-view.fxml") }
+        tabReceptor.setOnSelectionChanged { if (tabReceptor.isSelected) loadView(tabReceptor, "receptor-view.fxml") }
 
         // Ajustar el tamaño del Stage cuando cambie la pestaña seleccionada
         tabPane.selectionModel.selectedItemProperty().addListener { _, _, _ -> adjustStageSize() }

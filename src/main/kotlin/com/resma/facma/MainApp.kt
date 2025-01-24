@@ -1,6 +1,5 @@
 package com.resma.facma
 
-import com.resma.facma.entity.Product
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
@@ -10,8 +9,12 @@ class MainApp : Application() {
     override fun start(stage: Stage) {
         val fxmlLoader = FXMLLoader(MainApp::class.java.getResource("main-view.fxml"))
         val scene = Scene(fxmlLoader.load())
+        javaClass.getResource("/styles/styles.css")?.toExternalForm()?.let {
+            scene.stylesheets.add(it)
+        } ?: println("Advertencia: No se encontró el archivo styles.css")
         stage.title = "Facma"
         stage.scene = scene
+        stage.centerOnScreen()
         stage.show()
     }
 }

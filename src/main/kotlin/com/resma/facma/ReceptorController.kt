@@ -2,7 +2,7 @@ package com.resma.facma
 
 import javafx.fxml.FXML
 
-class FacturasController {
+class ReceptorController {
 
     @FXML
     fun initialize() {
