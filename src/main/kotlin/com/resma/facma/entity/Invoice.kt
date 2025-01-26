@@ -5,15 +5,15 @@ import com.resma.facma.entity.interfaces.Receptor
 import java.util.Date
 
 class Invoice {
-    private lateinit var invoiceNumber: String
-    private lateinit var issueDate: Date
-    private lateinit var dueDate: Date
-    private lateinit var emisor: Emisor
-    private lateinit var receptor: Receptor
-    private lateinit var products: Array<Product>
-    private var amount: Double = 0.0
-    private lateinit var createdAt: Date
-    private lateinit var updatedAt: Date
+    lateinit var invoiceNumber: String
+    lateinit var issueDate: Date
+    lateinit var dueDate: Date
+    lateinit var emisor: Emisor
+    lateinit var receptor: Receptor
+    lateinit var products: Array<Product>
+    var amount: Double = 0.0
+    lateinit var createdAt: Date
+    lateinit var updatedAt: Date
 
     fun addTax(product: Product, tax: Tax){
 
