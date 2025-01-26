@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="432.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.resma.facma.ReceptorController">
+<AnchorPane prefHeight="432.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.resma.facma.controller.ReceptorController">
     <Label layoutX="10.0" layoutY="10.0" text="Vista de receptores" />
-    <Button layoutX="10.0" layoutY="40.0" text="Crear receptor" />
+    <Button layoutX="10.0" layoutY="40.0" text="Crear receptor" styleClass="button-green" />
 </AnchorPane>

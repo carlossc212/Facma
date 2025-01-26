@@ -3,7 +3,21 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="432.0" prefWidth="673.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.resma.facma.ProductController">
-    <Label layoutX="10.0" layoutY="10.0" text="Vista de productos" />
-    <Button layoutX="10.0" layoutY="40.0" text="Crear producto" styleClass="button-green" />
+<AnchorPane prefHeight="456.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.resma.facma.controller.ProductController">
+    <Label layoutX="18.0" layoutY="27.0" text="Buscar producto:" />
+    <TextField fx:id="productSearch" layoutX="114.0" layoutY="23.0" prefHeight="25.0" prefWidth="319.0" promptText="Datos del producto" />
+    <TableView fx:id="productTable" layoutX="14.0" layoutY="68.0" prefHeight="310.0" prefWidth="680.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nombre" />
+            <TableColumn fx:id="descriptionColumn" text="Descripción" />
+            <TableColumn fx:id="priceColumn" text="Precio" />
+        </columns>
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
+    </TableView>
+
+    <Button onAction="#addProduct" layoutX="454.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-green" text="Añadir" />
+    <Button layoutX="613.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-red" text="Eliminar" />
+    <Button layoutX="534.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-yellow" text="Editar" />
 </AnchorPane>

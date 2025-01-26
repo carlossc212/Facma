@@ -1,5 +1,6 @@
-package com.resma.facma
+package com.resma.facma.controller
 
+import com.resma.facma.MainApp
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.control.Tab
@@ -22,7 +23,6 @@ class MainController {
 
     @FXML
     fun initialize() {
-        // Cargar la vista de Facturas al inicio
         loadView(tabInvoice, "invoice-view.fxml")
         loadView(tabProduct, "product-view.fxml")
         loadView(tabEmitter, "emitter-view.fxml")
@@ -40,7 +40,7 @@ class MainController {
 
     private fun loadView(tab: Tab, fxmlFile: String) {
         try {
-            val content: Pane = FXMLLoader(javaClass.getResource(fxmlFile)).load()
+            val content: Pane = FXMLLoader(MainApp::class.java.getResource(fxmlFile)).load()
             tab.content = content
         } catch (_: Exception) { }
     }

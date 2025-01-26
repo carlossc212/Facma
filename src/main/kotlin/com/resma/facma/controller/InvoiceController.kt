@@ -1,8 +1,8 @@
-package com.resma.facma
+package com.resma.facma.controller
 
 import javafx.fxml.FXML
 
-class EmitterController {
+class InvoiceController {
 
     @FXML
     fun initialize() {

@@ -38,6 +38,10 @@
     -fx-border-radius: 5px;    /* Bordes redondeados */
 }
 
+.tab-blue .tab:selected:hover{
+    -fx-border-color: transparent;
+}
+
 /* Botón verde más pequeño */
 .button-green {
     -fx-background-color: #4CAF50; /* Color de fondo verde */
@@ -68,4 +72,68 @@
 /* Efecto al pasar el mouse sobre el botón azul */
 .button-blue:hover {
     -fx-background-color: #006BB5; /* Fondo más claro al pasar el mouse */
+}
+
+/* Botón rojo completamente redondeado */
+.button-red {
+    -fx-background-color: #FF4C4C; /* Fondo rojo */
+    -fx-text-fill: white;          /* Texto blanco */
+    -fx-padding: 5 10;            /* Espaciado interno */
+    -fx-font-size: 12px;           /* Tamaño de fuente */
+    -fx-background-radius: 10px;   /* Bordes completamente redondeados */
+    -fx-border-color: transparent; /* Eliminar borde */
+    -fx-border-width: 0px;         /* Sin borde visible */
+    -fx-cursor: hand;              /* Cambiar el cursor al pasar sobre el botón */
+}
+
+/* Efecto al pasar el mouse sobre el botón rojo */
+.button-red:hover {
+    -fx-background-color: #E53935; /* Fondo más oscuro al pasar el mouse */
+}
+
+/* Efecto al presionar el botón rojo */
+.button-red:pressed {
+    -fx-background-color: #D32F2F; /* Fondo aún más oscuro al presionar */
+}
+
+.button-yellow {
+    -fx-background-color: #FFC107; /* Fondo amarillo */
+    -fx-text-fill: white;          /* Texto blanco */
+    -fx-padding: 5 10;             /* Espaciado interno */
+    -fx-font-size: 12px;           /* Tamaño de fuente */
+    -fx-background-radius: 10px;   /* Bordes completamente redondeados */
+    -fx-border-color: transparent; /* Eliminar borde */
+    -fx-border-width: 0px;         /* Sin borde visible */
+    -fx-cursor: hand;              /* Cambiar el cursor al pasar sobre el botón */
+}
+
+/* Efecto al pasar el mouse sobre el botón amarillo */
+.button-yellow:hover {
+    -fx-background-color: #FFA000; /* Fondo más oscuro al pasar el mouse */
+}
+
+/* Efecto al presionar el botón amarillo */
+.button-yellow:pressed {
+    -fx-background-color: #FF8F00; /* Fondo aún más oscuro al presionar */
+}
+
+.button-grey {
+    -fx-background-color: #9E9E9E; /* Fondo gris */
+    -fx-text-fill: white;           /* Texto blanco */
+    -fx-padding: 5 10;              /* Espaciado interno */
+    -fx-font-size: 12px;            /* Tamaño de fuente */
+    -fx-background-radius: 10px;    /* Bordes completamente redondeados */
+    -fx-border-color: transparent;  /* Eliminar borde */
+    -fx-border-width: 0px;          /* Sin borde visible */
+    -fx-cursor: hand;               /* Cambiar el cursor al pasar sobre el botón */
+}
+
+/* Efecto al pasar el mouse sobre el botón gris */
+.button-grey:hover {
+    -fx-background-color: #757575;  /* Fondo más oscuro al pasar el mouse */
+}
+
+/* Efecto al presionar el botón gris */
+.button-grey:pressed {
+    -fx-background-color: #616161;  /* Fondo aún más oscuro al presionar */
 }
