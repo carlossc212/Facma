@@ -1,5 +1,6 @@
 package com.resma.facma.db
 
+import com.resma.facma.entity.Product
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -14,7 +15,6 @@ class DatabaseSQL {
         }
     }
 
-    // Crear tabla de productos
     fun initializeDatabase() {
         val createTableQuery = """
             CREATE TABLE IF NOT EXISTS products (
@@ -31,16 +31,17 @@ class DatabaseSQL {
         }
     }
 
-    // Añadir producto
-    fun addProduct(name: String, description: String, price: Double): Boolean {
+    fun addProduct(product: Product): Boolean {
         val insertQuery = "INSERT INTO products (name, description, price) VALUES (?, ?, ?)"
 
         return try {
             DatabaseConnection.connect().use { connection ->
                 connection.prepareStatement(insertQuery).use { statement ->
-                    statement.setString(1, name)
-                    statement.setString(2, description)
-                    statement.setDouble(3, price)
+                    // Establecer los parámetros en el prepared statement con las propiedades del Product
+                    statement.setString(1, product.name)
+                    statement.setString(2, product.description)
+                    statement.setDouble(3, product.price)
+                    // Ejecutar la actualización y devolver si fue exitosa
                     statement.executeUpdate() > 0
                 }
             }
@@ -68,7 +69,6 @@ class DatabaseSQL {
         }
     }
 
-    // Eliminar producto por nombre
     fun deleteProductByName(name: String): Boolean {
         val deleteQuery = "DELETE FROM products WHERE name = ?"
 
@@ -85,7 +85,6 @@ class DatabaseSQL {
         }
     }
 
-    // Actualizar producto por nombre
     fun updateProduct(name: String, description: String, price: Double): Boolean {
         val updateQuery = """
             UPDATE products 
@@ -108,9 +107,8 @@ class DatabaseSQL {
         }
     }
 
-    // Obtener todos los productos
-    fun getAllProducts(): List<Map<String, String>> {
-        val products = mutableListOf<Map<String, String>>()
+    fun getAllProducts(): List<Product> {
+        val products = mutableListOf<Product>()
         val selectQuery = "SELECT * FROM products"
 
         try {
@@ -118,10 +116,10 @@ class DatabaseSQL {
                 connection.createStatement().use { statement ->
                     val resultSet = statement.executeQuery(selectQuery)
                     while (resultSet.next()) {
-                        val product = mapOf(
-                            "name" to resultSet.getString("name"),
-                            "description" to resultSet.getString("description"),
-                            "price" to resultSet.getDouble("price").toString()
+                        val product = Product.create(
+                            name = resultSet.getString("name"),
+                            description = resultSet.getString("description") ?: "",
+                            price = resultSet.getDouble("price")
                         )
                         products.add(product)
                     }

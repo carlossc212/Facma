@@ -17,7 +17,7 @@
         </columnResizePolicy>
     </TableView>
 
-    <Button onAction="#addProduct" layoutX="454.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-green" text="Añadir" />
-    <Button layoutX="613.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-red" text="Eliminar" />
-    <Button layoutX="534.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-yellow" text="Editar" />
+    <Button fx:id="addButton" onAction="#addProduct" layoutX="454.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-green" text="Añadir" />
+    <Button fx:id="editButton" layoutX="534.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-yellow" text="Editar" />
+    <Button fx:id="deleteButton" onAction="#deleteProduct" layoutX="613.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-red" text="Eliminar" />
 </AnchorPane>

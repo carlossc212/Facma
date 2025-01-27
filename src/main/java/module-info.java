@@ -12,4 +12,6 @@ module com.resma.facma {
     exports com.resma.facma;
     opens com.resma.facma.controller to javafx.fxml;
     exports com.resma.facma.controller;
+    opens com.resma.facma.entity to javafx.fxml;
+    exports com.resma.facma.entity;
 }

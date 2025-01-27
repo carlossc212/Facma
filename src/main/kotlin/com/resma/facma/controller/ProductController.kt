@@ -1,6 +1,7 @@
 package com.resma.facma.controller
 
 import com.resma.facma.db.DatabaseSQL
+import com.resma.facma.entity.Product
 import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
@@ -8,9 +9,13 @@ import javafx.geometry.Insets
 import javafx.geometry.Pos
 import javafx.scene.Scene
 import javafx.scene.control.*
+import javafx.scene.control.cell.PropertyValueFactory
 import javafx.scene.layout.GridPane
 import javafx.scene.layout.HBox
+import javafx.stage.Modality
 import javafx.stage.Stage
+import java.awt.Toolkit
+//Toolkit.getDefaultToolkit().beep()
 
 class ProductController {
 
@@ -18,28 +23,36 @@ class ProductController {
     private lateinit var productSearch: TextField
 
     @FXML
-    private lateinit var productTable: TableView<Map<String, String>>
+    private lateinit var addButton: Button
     @FXML
-    private lateinit var nameColumn: TableColumn<Map<String, String>, String>
+    private lateinit var editButton: Button
     @FXML
-    private lateinit var descriptionColumn: TableColumn<Map<String, String>, String>
+    private lateinit var deleteButton: Button
+
     @FXML
-    private lateinit var priceColumn: TableColumn<Map<String, String>, String>
+    private lateinit var productTable: TableView<Product>
+    @FXML
+    private lateinit var nameColumn: TableColumn<Product, String>
+    @FXML
+    private lateinit var descriptionColumn: TableColumn<Product, String>
+    @FXML
+    private lateinit var priceColumn: TableColumn<Product, String>
 
     private val databaseSQL = DatabaseSQL()
 
     @FXML
     fun initialize() {
-        // Configurar columnas
-        nameColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value["name"] ?: "?") }
-        descriptionColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value["description"] ?: "?") }
-        priceColumn.setCellValueFactory { cellData -> SimpleStringProperty(cellData.value["price"] ?: "?") }
+        nameColumn.cellValueFactory = PropertyValueFactory("name")
+        descriptionColumn.cellValueFactory = PropertyValueFactory("description")
+        priceColumn.cellValueFactory = PropertyValueFactory("price")
 
-        // Inicializar base de datos
         databaseSQL.initializeDatabase()
-
-        // Cargar productos
         loadProducts()
+
+        productTable.selectionModel.selectedItemProperty().addListener { _, _, newValue ->
+            editButton.isDisable = newValue == null
+            deleteButton.isDisable = newValue == null
+        }
     }
 
     // Cargar productos en la tabla
@@ -54,6 +67,9 @@ class ProductController {
         // Crear un diálogo de entrada
         val dialog = Stage()
         dialog.title = "Añadir producto"
+        dialog.isIconified = false
+        dialog.isResizable = false
+        dialog.initModality(Modality.APPLICATION_MODAL) // No permite salir o pulsar fuera
 
         // Crear un GridPane para el diseño
         val gridPane = GridPane()
@@ -73,15 +89,10 @@ class ProductController {
         val numberFilter = TextFormatter<Double> { change ->
             if (change.controlNewText.matches("^\\d*(\\.\\d*)?$".toRegex())) {
                 change
-            } else {
-                null
-            }
+            } else { null }
         }
-
         priceField.textFormatter = numberFilter
 
-
-        // Crear las etiquetas
         gridPane.add(Label("Nombre:"), 0, 0)
         gridPane.add(nameField, 1, 0)
         gridPane.add(Label("Descripción:"), 0, 1)
@@ -112,39 +123,31 @@ class ProductController {
         cancelButton.setOnAction { dialog.close() }
 
         acceptButton.setOnAction {
-            val name = nameField.text.trim()
-            val description = descriptionField.text.trim()
-            val price = priceField.text.trim().toDoubleOrNull()
+            val newProduct = Product.create(
+                nameField.text.trim(),
+                descriptionField.text.trim(),
+                priceField.text.trim().toDoubleOrNull() ?: 0.0
+            )
 
-            if (name.isNotEmpty() && description.isNotEmpty() && price != null && price > 0) {
+            // Verificar si los campos son válidos
+            if (newProduct.name.isNotEmpty() && !newProduct.description.isNullOrBlank() && newProduct.price > 0) {
                 // Consultar en la base de datos si el nombre del producto ya existe
-                val existingProduct = databaseSQL.checkIfProductExists(name)
+                // Aqui cambiar por listener que se actualice con cada char introducido
+                val existingProduct = databaseSQL.checkIfProductExists(newProduct.name)
 
                 if (existingProduct) {
                     // Si el producto ya existe, colorear el borde del TextField en rojo
                     nameField.style = "-fx-border-color: red; -fx-border-width: 2px;"
-                    val alert = Alert(Alert.AlertType.WARNING)
-                    alert.title = "Producto ya existente"
-                    alert.headerText = null
-                    alert.contentText = "Ya existe un producto con el mismo nombre. Por favor, ingrese otro nombre."
-                    alert.showAndWait()
+                    Toolkit.getDefaultToolkit().beep()
+                    nameField.requestFocus()
                 } else {
                     // Si no existe, agregar el producto a la base de datos
-                    if (databaseSQL.addProduct(name, description, price)) {
-                        println("Producto añadido: $name, $description, $price")
-                        loadProducts()  // Recargar la lista de productos
+                    if (databaseSQL.addProduct(newProduct)) {
+                        loadProducts()
                         dialog.close()
-                    } else {
-                        // Si hubo un error al agregar el producto
-                        val alert = Alert(Alert.AlertType.ERROR)
-                        alert.title = "Error"
-                        alert.headerText = null
-                        alert.contentText = "Hubo un problema al añadir el producto. Intenta nuevamente."
-                        alert.showAndWait()
                     }
                 }
             } else {
-                // Mostrar un error si los datos no son válidos
                 val alert = Alert(Alert.AlertType.ERROR)
                 alert.title = "Error"
                 alert.headerText = null
@@ -152,8 +155,6 @@ class ProductController {
                 alert.showAndWait()
             }
         }
-
-        // Mostrar el diálogo
         dialog.showAndWait()
     }
 
@@ -165,15 +166,26 @@ class ProductController {
         alert.showAndWait()
     }
 
-    // Eliminar el producto seleccionado
     @FXML
     fun deleteProduct() {
         val selectedProduct = productTable.selectionModel.selectedItem
         if (selectedProduct != null) {
-            val name = selectedProduct["name"]
-            if (name != null && databaseSQL.deleteProductByName(name)) {
-                loadProducts()
+            val name = selectedProduct.name  // Accede directamente a la propiedad `name` del objeto `Product`
+            if (databaseSQL.deleteProductByName(name)) {
+                loadProducts() // Recarga la tabla después de eliminar
+            } else {
+                val alert = Alert(Alert.AlertType.ERROR)
+                alert.title = "Error"
+                alert.headerText = null
+                alert.contentText = "No se pudo eliminar el producto."
+                alert.showAndWait()
             }
+        } else {
+            val alert = Alert(Alert.AlertType.WARNING)
+            alert.title = "Advertencia"
+            alert.headerText = null
+            alert.contentText = "No se ha seleccionado ningún producto."
+            alert.showAndWait()
         }
     }
 }
