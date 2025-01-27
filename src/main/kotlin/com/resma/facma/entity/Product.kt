@@ -1,6 +1,7 @@
 package com.resma.facma.entity
 
 class Product private constructor(val name: String, val description: String?, price: Double){
+    var id: Int = 0
     var price: Double = price
         set(value){
             field = value
