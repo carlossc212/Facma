@@ -1,7 +1,5 @@
 package com.resma.facma
 
-import com.resma.facma.entity.Invoice
-import com.resma.facma.util.PDFGenerator
 import javafx.application.Application
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene

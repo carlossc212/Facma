@@ -66,6 +66,7 @@ class ProductController {
     @FXML
     fun addProduct() {
         // Crear un diálogo de entrada
+        val productsList: List<Product> = databaseSQL.getAllProducts()
         val dialog = Stage()
         dialog.title = "Añadir producto"
         dialog.isIconified = false
@@ -149,13 +150,13 @@ class ProductController {
         fun validateNameAndDescription(
             nameField: TextField,
             descriptionField: TextField,
-            databaseSQL: DatabaseSQL
         ) {
             val name = nameField.text.trim()
             val description = descriptionField.text.trim()
 
             if (name.isNotEmpty() && description.isNotEmpty()) {
-                val productExists = databaseSQL.checkIfNameAndDescriptionExist(name, description)
+
+                val productExists = productsList.find { it.name == name && it.description == description } != null
 
                 if (productExists) {
                     Toolkit.getDefaultToolkit().beep()
@@ -172,13 +173,12 @@ class ProductController {
 
         nameField.textProperty().addListener { _, _, _ ->
             validateField(nameField)
-            validateNameAndDescription(nameField, descriptionField, databaseSQL)
+            validateNameAndDescription(nameField, descriptionField)
             updateAcceptButtonState()
         }
-
         descriptionField.textProperty().addListener { _, _, _ ->
             validateField(descriptionField)
-            validateNameAndDescription(nameField, descriptionField, databaseSQL)
+            validateNameAndDescription(nameField, descriptionField)
             updateAcceptButtonState()
         }
 

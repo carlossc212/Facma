@@ -7,10 +7,11 @@ import com.lowagie.text.pdf.PdfWriter
 import com.resma.facma.entity.Invoice
 import java.awt.Color
 import java.io.FileOutputStream
+import javax.xml.parsers.DocumentBuilderFactory
 
-class PDFGenerator{
+class DocGenerator{
     companion object{
-        fun generateInvoice(invoice: Invoice){
+        fun generatePDF(invoice: Invoice){
             val document = Document(PageSize.A4)
             val writer = PdfWriter.getInstance(document, FileOutputStream("Factura_Ejemplo.pdf"))
 
@@ -227,6 +228,10 @@ class PDFGenerator{
             document.add(Chunk.NEWLINE)
 
             document.close()
+        }
+
+        fun generateXML(invoice: Invoice){
+            val builder = DocumentBuilderFactory.newInstance().newDocumentBuilder()
         }
     }
 }
