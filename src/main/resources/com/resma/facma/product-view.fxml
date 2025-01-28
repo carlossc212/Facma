@@ -1,11 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="456.0" prefWidth="725.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.resma.facma.controller.ProductController">
-    <Label layoutX="18.0" layoutY="27.0" text="Buscar producto:" />
-    <TextField fx:id="productSearch" layoutX="114.0" layoutY="23.0" prefHeight="25.0" prefWidth="319.0" promptText="Datos del producto" />
+    <HBox layoutX="20.0" layoutY="23.0" spacing="8">
+        <Label text="Buscar producto:">
+         <HBox.margin>
+            <Insets top="5.0" />
+         </HBox.margin></Label>
+        <TextField fx:id="productSearch" prefHeight="25.0" prefWidth="310.0" promptText="Datos del producto" styleClass="round-textField">
+         <HBox.margin>
+            <Insets top="1.0" />
+         </HBox.margin></TextField>
+        <Button fx:id="addButton" minWidth="-Infinity" onAction="#addProduct" prefWidth="70.0" styleClass="button-green" text="Añadir">
+         <HBox.margin>
+            <Insets left="10.0" />
+         </HBox.margin></Button>
+        <Button fx:id="editButton" minWidth="-Infinity" prefWidth="70.0" styleClass="button-yellow" text="Editar" />
+        <Button fx:id="deleteButton" minWidth="-Infinity" onAction="#deleteProduct" prefWidth="70.0" styleClass="button-red" text="Eliminar" />
+    </HBox>
     <TableView fx:id="productTable" layoutX="14.0" layoutY="68.0" prefHeight="310.0" prefWidth="680.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
         <columns>
             <TableColumn fx:id="idColumn" text="ID" />
@@ -17,8 +32,4 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
     </TableView>
-
-    <Button fx:id="addButton" onAction="#addProduct" layoutX="454.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-green" text="Añadir" />
-    <Button fx:id="editButton" layoutX="534.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-yellow" text="Editar" />
-    <Button fx:id="deleteButton" onAction="#deleteProduct" layoutX="613.0" layoutY="21.0" minWidth="-Infinity" prefWidth="70.0" styleClass="button-red" text="Eliminar" />
 </AnchorPane>

@@ -137,3 +137,9 @@
 .button-grey:pressed {
     -fx-background-color: #616161;  /* Fondo aún más oscuro al presionar */
 }
+
+.round-textField {
+    -fx-padding: 5px 10px;
+    -fx-font-size: 12px;
+    -fx-background-radius: 10px;
+}
