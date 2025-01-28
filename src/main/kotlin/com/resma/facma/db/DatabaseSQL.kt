@@ -18,7 +18,8 @@ class DatabaseSQL {
     fun initializeDatabase() {
         val createTableQuery = """
             CREATE TABLE IF NOT EXISTS products (
-                name TEXT PRIMARY KEY,
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT,
                 description TEXT,
                 price REAL
             );
@@ -36,13 +37,22 @@ class DatabaseSQL {
 
         return try {
             DatabaseConnection.connect().use { connection ->
-                connection.prepareStatement(insertQuery).use { statement ->
-                    // Establecer los parámetros en el prepared statement con las propiedades del Product
+                connection.prepareStatement(insertQuery, java.sql.Statement.RETURN_GENERATED_KEYS).use { statement ->
                     statement.setString(1, product.name)
                     statement.setString(2, product.description)
                     statement.setDouble(3, product.price)
-                    // Ejecutar la actualización y devolver si fue exitosa
-                    statement.executeUpdate() > 0
+
+                    val affectedRows = statement.executeUpdate()
+
+                    if (affectedRows > 0) {
+                        val generatedKeys = statement.generatedKeys
+                        if (generatedKeys.next()) {
+                            product.id = generatedKeys.getInt(1)  // Asignar el id autoincrementado
+                        }
+                        true
+                    } else {
+                        false
+                    }
                 }
             }
         } catch (e: Exception) {
@@ -51,14 +61,15 @@ class DatabaseSQL {
         }
     }
 
-    fun checkIfProductExists(name: String): Boolean {
-        val query = "SELECT COUNT(*) FROM products WHERE name = ?"
+    fun checkIfNameAndDescriptionExist(name: String, description: String): Boolean {
+        val query = "SELECT COUNT(*) FROM products WHERE name = ? AND description = ?"
         return try {
             DatabaseConnection.connect().use { connection ->
                 connection.prepareStatement(query).use { statement ->
                     statement.setString(1, name)
+                    statement.setString(2, description)
                     val resultSet = statement.executeQuery()
-                    val count = resultSet.getInt(1)
+                    val count = if (resultSet.next()) resultSet.getInt(1) else 0
                     resultSet.close()
                     count > 0
                 }
@@ -69,13 +80,13 @@ class DatabaseSQL {
         }
     }
 
-    fun deleteProductByName(name: String): Boolean {
-        val deleteQuery = "DELETE FROM products WHERE name = ?"
+    fun deleteProductByID(id: Int): Boolean {
+        val deleteQuery = "DELETE FROM products WHERE id = ?"
 
         return try {
             DatabaseConnection.connect().use { connection ->
                 connection.prepareStatement(deleteQuery).use { statement ->
-                    statement.setString(1, name)
+                    statement.setInt(1, id)
                     statement.executeUpdate() > 0
                 }
             }
@@ -121,6 +132,7 @@ class DatabaseSQL {
                             description = resultSet.getString("description") ?: "",
                             price = resultSet.getDouble("price")
                         )
+                        product.id = resultSet.getInt("id")
                         products.add(product)
                     }
                 }

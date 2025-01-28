@@ -2,7 +2,6 @@ package com.resma.facma.controller
 
 import com.resma.facma.db.DatabaseSQL
 import com.resma.facma.entity.Product
-import javafx.beans.property.SimpleStringProperty
 import javafx.collections.FXCollections
 import javafx.fxml.FXML
 import javafx.geometry.Insets
@@ -15,7 +14,6 @@ import javafx.scene.layout.HBox
 import javafx.stage.Modality
 import javafx.stage.Stage
 import java.awt.Toolkit
-//Toolkit.getDefaultToolkit().beep()
 
 class ProductController {
 
@@ -32,6 +30,8 @@ class ProductController {
     @FXML
     private lateinit var productTable: TableView<Product>
     @FXML
+    private lateinit var idColumn: TableColumn<Product, String>
+    @FXML
     private lateinit var nameColumn: TableColumn<Product, String>
     @FXML
     private lateinit var descriptionColumn: TableColumn<Product, String>
@@ -42,6 +42,7 @@ class ProductController {
 
     @FXML
     fun initialize() {
+        idColumn.cellValueFactory = PropertyValueFactory("id")
         nameColumn.cellValueFactory = PropertyValueFactory("name")
         descriptionColumn.cellValueFactory = PropertyValueFactory("description")
         priceColumn.cellValueFactory = PropertyValueFactory("price")
@@ -80,10 +81,13 @@ class ProductController {
         // Crear los campos de entrada
         val nameField = TextField()
         nameField.promptText = "Nombre del producto"
+        nameField.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
         val descriptionField = TextField()
         descriptionField.promptText = "Descripción del producto"
+        descriptionField.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
         val priceField = TextField()
         priceField.promptText = "Precio del producto"
+        priceField.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
 
         // Crear un TextFormatter para aceptar solo números
         val numberFilter = TextFormatter<Double> { change ->
@@ -102,6 +106,7 @@ class ProductController {
 
         // Crear los botones
         val acceptButton = Button("Aceptar")
+        acceptButton.isDisable = true
         val cancelButton = Button("Cancelar")
         acceptButton.style = "-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
         cancelButton.style = "-fx-background-color: #B0BEC5; -fx-text-fill: white; -fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
@@ -119,7 +124,69 @@ class ProductController {
         val scene = Scene(gridPane)
         dialog.scene = scene
 
-        // Definir las acciones de los botones
+        fun validateField(field: TextField): Boolean {
+            return if (field.text.trim().isEmpty()) {
+                field.style = "-fx-border-color: red; -fx-border-width: 2px; -fx-focus-color: transparent; -fx-padding: 3px 8px; -fx-font-size: 12px; -fx-background-radius: 10px; -fx-border-radius: 10px;"
+                false
+            } else {
+                field.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
+                true
+            }
+        }
+
+        fun updateAcceptButtonState() {
+            val isProductDuplicate = databaseSQL.checkIfNameAndDescriptionExist(
+                nameField.text.trim(),
+                descriptionField.text.trim()
+            )
+
+            acceptButton.isDisable = nameField.text.trim().isEmpty() ||
+                    descriptionField.text.trim().isEmpty() ||
+                    priceField.text.trim().isEmpty() || isProductDuplicate
+        }
+
+        // Verificar si el nombre y la descripción coinciden con un producto existente
+        fun validateNameAndDescription(
+            nameField: TextField,
+            descriptionField: TextField,
+            databaseSQL: DatabaseSQL
+        ) {
+            val name = nameField.text.trim()
+            val description = descriptionField.text.trim()
+
+            if (name.isNotEmpty() && description.isNotEmpty()) {
+                val productExists = databaseSQL.checkIfNameAndDescriptionExist(name, description)
+
+                if (productExists) {
+                    Toolkit.getDefaultToolkit().beep()
+                    // Cambiar el borde a azul si coinciden
+                    nameField.style = "-fx-border-color: blue; -fx-border-width: 2px; -fx-focus-color: transparent; -fx-padding: 3px 8px; -fx-font-size: 12px; -fx-background-radius: 10px; -fx-border-radius: 10px;"
+                    descriptionField.style = "-fx-border-color: blue; -fx-border-width: 2px; -fx-focus-color: transparent; -fx-padding: 3px 8px; -fx-font-size: 12px; -fx-background-radius: 10px; -fx-border-radius: 10px;"
+                } else {
+                    // Restablecer estilos si no coinciden
+                    nameField.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
+                    descriptionField.style = "-fx-padding: 5px 10px; -fx-font-size: 12px; -fx-background-radius: 10px;"
+                }
+            }
+        }
+
+        nameField.textProperty().addListener { _, _, _ ->
+            validateField(nameField)
+            validateNameAndDescription(nameField, descriptionField, databaseSQL)
+            updateAcceptButtonState()
+        }
+
+        descriptionField.textProperty().addListener { _, _, _ ->
+            validateField(descriptionField)
+            validateNameAndDescription(nameField, descriptionField, databaseSQL)
+            updateAcceptButtonState()
+        }
+
+        priceField.textProperty().addListener { _, _, _ ->
+            validateField(priceField)
+            updateAcceptButtonState()
+        }
+
         cancelButton.setOnAction { dialog.close() }
 
         acceptButton.setOnAction {
@@ -129,30 +196,9 @@ class ProductController {
                 priceField.text.trim().toDoubleOrNull() ?: 0.0
             )
 
-            // Verificar si los campos son válidos
-            if (newProduct.name.isNotEmpty() && !newProduct.description.isNullOrBlank() && newProduct.price > 0) {
-                // Consultar en la base de datos si el nombre del producto ya existe
-                // Aqui cambiar por listener que se actualice con cada char introducido
-                val existingProduct = databaseSQL.checkIfProductExists(newProduct.name)
-
-                if (existingProduct) {
-                    // Si el producto ya existe, colorear el borde del TextField en rojo
-                    nameField.style = "-fx-border-color: red; -fx-border-width: 2px;"
-                    Toolkit.getDefaultToolkit().beep()
-                    nameField.requestFocus()
-                } else {
-                    // Si no existe, agregar el producto a la base de datos
-                    if (databaseSQL.addProduct(newProduct)) {
-                        loadProducts()
-                        dialog.close()
-                    }
-                }
-            } else {
-                val alert = Alert(Alert.AlertType.ERROR)
-                alert.title = "Error"
-                alert.headerText = null
-                alert.contentText = "Por favor, ingrese todos los campos correctamente."
-                alert.showAndWait()
+            if (databaseSQL.addProduct(newProduct)) {
+                loadProducts()
+                dialog.close()
             }
         }
         dialog.showAndWait()
@@ -169,23 +215,7 @@ class ProductController {
     @FXML
     fun deleteProduct() {
         val selectedProduct = productTable.selectionModel.selectedItem
-        if (selectedProduct != null) {
-            val name = selectedProduct.name  // Accede directamente a la propiedad `name` del objeto `Product`
-            if (databaseSQL.deleteProductByName(name)) {
-                loadProducts() // Recarga la tabla después de eliminar
-            } else {
-                val alert = Alert(Alert.AlertType.ERROR)
-                alert.title = "Error"
-                alert.headerText = null
-                alert.contentText = "No se pudo eliminar el producto."
-                alert.showAndWait()
-            }
-        } else {
-            val alert = Alert(Alert.AlertType.WARNING)
-            alert.title = "Advertencia"
-            alert.headerText = null
-            alert.contentText = "No se ha seleccionado ningún producto."
-            alert.showAndWait()
-        }
+        val id = selectedProduct.id
+        if (databaseSQL.deleteProductByID(id)) { loadProducts() }
     }
 }

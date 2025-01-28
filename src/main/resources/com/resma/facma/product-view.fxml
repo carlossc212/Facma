@@ -8,6 +8,7 @@
     <TextField fx:id="productSearch" layoutX="114.0" layoutY="23.0" prefHeight="25.0" prefWidth="319.0" promptText="Datos del producto" />
     <TableView fx:id="productTable" layoutX="14.0" layoutY="68.0" prefHeight="310.0" prefWidth="680.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0">
         <columns>
+            <TableColumn fx:id="idColumn" text="ID" />
             <TableColumn fx:id="nameColumn" text="Nombre" />
             <TableColumn fx:id="descriptionColumn" text="Descripción" />
             <TableColumn fx:id="priceColumn" text="Precio" />
